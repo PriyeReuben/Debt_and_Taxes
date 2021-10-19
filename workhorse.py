@@ -1,3 +1,6 @@
+from kivy.app import App
+
+
 salary=float(input("What is your salary?"))
 max = salary *2
 your_bracket ={} #this should be empty
