@@ -4,11 +4,44 @@ DaTApp:
     cols: 1
     orientation: 'vertical'
 
-    Button:
-        text: "Graph goes here"
-        size_hint: (1, .7)
+    Image:
+        id: image_id
+        source: root.image_source
+        size_hint: (1, .8)
 
-    Button:
-        text: "printout goes here"
-        size_hint: (1, .3)
+    BoxLayout:
+        cols: 3
+        orientation: 'horizontal'
+        size_hint: (1,.2)
+
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: (.33, 1)
+
+            Label:
+                text: '$'
+                font_size: 30
+                size_hint: (.25, 1)
+
+            TextInput:
+                id: text_input_id
+                multiline: False
+                hint_text: 'Put your salary here and press enter..'
+                on_text_validate: root.process_salary_text(text_input_id.text)
+
+
+        Spinner:
+            id: spinner_id
+            size_hint: (.33, 1)
+            text: 'Select Filing Status:'
+            values: 'Single', 'Married Jointly', 'Married Separately', 'Head of Household'
+            on_text: root.spinner_selection(spinner_id.text)
+                #print("The spinner {} has text {}".format(self, self.text))
+
+
+        Button:
+            text: "Calculate Federal Taxes"
+            size_hint: (.33, 1)
+            on_press: root.on_calculate_clicked()
 

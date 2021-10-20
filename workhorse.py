@@ -24,7 +24,7 @@ while True:
     if bracket == 1:
         your_bracket=single_income_rates
         break
-    elif bracket ==2:
+    elif bracket == 2:
         your_bracket = married_jointly_income_rates
         break
     elif bracket == 3:
