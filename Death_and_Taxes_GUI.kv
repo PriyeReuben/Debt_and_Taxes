@@ -4,10 +4,31 @@ DaTApp:
     cols: 1
     orientation: 'vertical'
 
-    Image:
-        id: image_id
-        source: root.image_source
+    BoxLayout:
+        cols: 2
         size_hint: (1, .8)
+        orientation: 'horizontal'
+
+        Image:
+            id: image_id
+            source: root.image_source
+            size_hint: (.75, 1)
+        BoxLayout:
+            cols: 2
+            orientation: 'vertical'
+            size_hint: (.25, 1)
+
+            Label:
+                text: "Salary:"
+            Label:
+                text: "s_value"
+
+            Label:
+                text: "Taxes:"
+            Label:
+                text: "t_value"
+
+
 
     BoxLayout:
         cols: 3
@@ -28,7 +49,8 @@ DaTApp:
                 id: text_input_id
                 multiline: False
                 hint_text: 'Put your salary here and press enter..'
-                on_text_validate: root.process_salary_text(text_input_id.text)
+                #on_text_validate: root.process_salary_text(text_input_id.text)
+                on_text_validate: root.process_salary_text(self)
 
 
         Spinner:
