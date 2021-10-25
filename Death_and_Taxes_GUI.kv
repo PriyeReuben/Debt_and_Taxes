@@ -18,15 +18,36 @@ DaTApp:
             orientation: 'vertical'
             size_hint: (.25, 1)
 
-            Label:
-                text: "Salary:"
-            Label:
-                text: "s_value"
+            GridLayout:
+                cols:2
 
-            Label:
-                text: "Taxes:"
-            Label:
-                text: "t_value"
+                Label:
+                    text: "Salary:"
+                    text_size: self.width, None
+                    color: (0,1,0,1)
+
+                Label:
+                    text: root.salary_str
+                    text_size: self.width, None
+                    color: (0,1,0,1)
+
+                Label:
+                    text: "Federal Taxes:"
+                    text_size: self.width, None
+                    color: (1,0,0,1)
+                Label:
+                    text: root.federal_tax_str
+                    text_size: self.width, None
+                    color: (1,0,0,1)
+
+                Label:
+                    text: "Effective Tax Rate:"
+                    text_size: self.width, None
+                    color: (0,0,1,1)
+                Label:
+                    text: root.effective_tax_rate_str
+                    text_size: self.width, None
+                    color: (0,0,1,1)
 
 
 
@@ -45,12 +66,20 @@ DaTApp:
                 font_size: 30
                 size_hint: (.25, 1)
 
-            TextInput:
-                id: text_input_id
-                multiline: False
-                hint_text: 'Put your salary here and press enter..'
-                #on_text_validate: root.process_salary_text(text_input_id.text)
-                on_text_validate: root.process_salary_text(self)
+            BoxLayout:
+                orientation: 'vertical'
+                TextInput:
+                    id: text_input_id
+                    multiline: False
+                    hint_text: 'Put your salary here and press enter...'
+                    #on_text_validate: root.process_salary_text(text_input_id.text)
+                    on_text_validate: root.process_salary_text(self)
+                    text_size: self.width, None
+                    size_hint: (1, .8)
+                Label:
+                    text: "Press Enter after changing salary.  Select filing status."
+                    text_size: self.width, None
+                    bold: True
 
 
         Spinner:

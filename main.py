@@ -3,25 +3,20 @@ from kivy.properties import StringProperty, AliasProperty
 from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
-from kivy.uix.anchorlayout import AnchorLayout
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.stacklayout import StackLayout
 import matplotlib.pyplot as plt
-from datetime import datetime
-import os
+
 
 class DaTApp(BoxLayout):
-    #salary = float(input("What is your salary?"))
-    salary = 0 #delete this later
-    max = salary * 2
+
+    salary = 0
+    max = 10000000000000000000
     your_bracket = {}  # this should be empty
     federal_tax = 0
-
-
     image_source = StringProperty('blank.jpg')
     image_name = ""
-
-    now = datetime.now()
+    salary_str = StringProperty("")
+    federal_tax_str = StringProperty("")
+    effective_tax_rate_str = StringProperty("")
 
     single_income_rates = {.1: 9950, .12: 40525, .22: 86375, .24: 164925, .32: 209425, .35: 523600, .37: max}
     married_jointly_income_rates = {.1: 19900, .12: 81050, .22: 172750, .24: 329850, .32: 418850, .35: 628300, .37: max}
@@ -33,7 +28,6 @@ class DaTApp(BoxLayout):
     def on_calculate_clicked(self):
         self.calculate_fed_tax()
         self.generate_graph_image()
-        print(str(self.now))
         self.update_image()
 
 
@@ -53,40 +47,26 @@ class DaTApp(BoxLayout):
 
     def generate_graph_image(self):
         #create a bar graph
-        x = ["Salary", "Total Tax"]
+        x = ["Salary\n" + self.salary_str, "Total Fed Tax\n" + self.federal_tax_str]
         y = [self.salary, self.federal_tax]
-        x0=0
-        y0=0
-        #self.max = self.salary *2
-        #plt.ylim(0,self.max) #set y-axis maximum to double salary
+        plt.ylabel("Dollars")
+        plt.title("Salary vs Actual Federal Tax")
         plt.bar(x, y)
 
-        #generate new image name
-        self.now = datetime.now() #get the current datetime
-        text_now = str(self.now)
-        text_now = text_now.replace('.','') #get rid of periods
-        text_now = text_now.replace(':', '') #get rid of colons
-
-        #save plot as new image
-        #self.image_name = '{}.jpg'.format(text_now)
+        #save graph as new image
         self.image_name = "results.jpg"
         plt.savefig(self.image_name)
-        plt.clf()
+        plt.clf()  #clear matplotlib buffer.  Do this.
 
-        print("new image generated.")
+        #print("new image generated.")
 
     def update_image(self):
-        #print("Image name:" + self.image_name)
-        #self.image_source = StringProperty(self.image_name)
         self.ids.image_id.source = self.image_name
         self.ids.image_id.reload()
-        #os.remove(self.image_name)
 
 
 
     def process_salary_text(self, widget):
-        #this can be bypassed by passing text_input_id.text in the .kv file
-        #text = self.ids.text_input_id.text #i don't understand why this works, but it does.
         self.salary = float(widget.text)
         print(self.salary)
 
@@ -95,12 +75,15 @@ class DaTApp(BoxLayout):
         taxable = []
         working_salary = self.salary
 
+        # make it so that the max value in your_bracket is salary * 2
+        #self.your_bracket[.37] = self.salary * 2 # this breaks my code.
+        #print("New max: "+ str(self.your_bracket[.37]))
+
 
         for x in self.your_bracket:
             if working_salary > 0:
                 if working_salary <= self.your_bracket[x]:
                     taxable.append(working_salary * x)
-                    # print(taxable)
                     break
                 else:
                     taxable.append(self.your_bracket[x] * x)
@@ -109,10 +92,16 @@ class DaTApp(BoxLayout):
                 taxable.append(0)
                 print("Sir, this is a capitalist society.")
                 break
-        self.federal_tax = sum(taxable)
-        #effective_federal_tax_rate = federal_tax / salary * 100
 
-        print("Federal tax: " + str(self.federal_tax))
+        self.federal_tax = sum(taxable) # + (self.salary * .0765)  # .0765 = FICA
+
+
+        self.salary_str = "$" + str(self.salary)
+        self.federal_tax_str = "$" + str(self.federal_tax)
+        self.effective_tax_rate_str = "%" + str(float(self.federal_tax) / float(self.salary) * 100)
+        print("Your Salary: {} \n".format(self.salary_str) +
+              "Your Federal Taxes: {} \n".format(self.federal_tax_str) +
+              "Your Effective Federal Tax Rate: {}".format(self.effective_tax_rate_str))
 
 
 
