@@ -1,2 +1,3 @@
 # Debt_and_Taxes
- Tax calculator
+ Simple federal tax calculator
+Does not actually consider debts.
